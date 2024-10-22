@@ -7,7 +7,7 @@ IMG_REPO = ghcr.io
 else
 IMG_REPO = docker.io
 endif
-OWNER = phusion
+OWNER = pmarinov944
 DISABLE_OPTIMIZATIONS = 0
 IMAGE = $(IMG_REPO)/$(OWNER)/holy-build-box
 

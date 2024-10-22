@@ -6,5 +6,5 @@ activate_holy_build_box /hbb_shlib \
 	"" \
 	"-static-libstdc++" \
 	"-fPIC" \
-	"" \
+	"-fPIC" \
 	"-static-libstdc++"

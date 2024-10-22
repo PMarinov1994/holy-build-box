@@ -200,7 +200,7 @@ function install_openssl()
 
 		# shellcheck disable=SC2086
 		run ./Configure "linux-$(uname -m)" \
-			--prefix="$PREFIX" --openssldir="$PREFIX/openssl" \
+			--prefix="$PREFIX" --openssldir="/etc/ssl" \
 			threads zlib no-shared no-sse2 no-legacy no-tests
 
 		# Force Make to use the environment variables instead
