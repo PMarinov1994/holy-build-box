@@ -56,12 +56,7 @@ if ! eval_bool "$SKIP_INITIALIZE"; then
 	run sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
 	run sed -i 's|#baseurl=http://mirror.centos.org|baseurl=https://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
-	yumarch=$(cat /etc/yum/vars/basearch)
-	if [[ "$yumarch" == "i386" ]]; then
-		run cp /hbb_build/CentOS-SCLo-scl-i386.repo /etc/yum.repos.d/CentOS-SCLo-scl.repo
-	else
-		run cp /hbb_build/CentOS-SCLo-scl.repo /etc/yum.repos.d/CentOS-SCLo-scl.repo
-	fi
+	run cp /hbb_build/CentOS-SCLo-scl.repo /etc/yum.repos.d/CentOS-SCLo-scl.repo
 
 	run touch /var/lib/rpm/*
 
@@ -70,7 +65,7 @@ if ! eval_bool "$SKIP_INITIALIZE"; then
 		file gettext git libtool m4 openssl-devel patch perl-IPC-Cmd \
 		pkgconfig python2-devel python2-pip python2-setuptools \
 		tar zlib-devel "devtoolset-$DEVTOOLSET_VERSION"
-	run yum install -y --enablerepo=epel ccache
+	run yum install -y ccache
 
 	echo "*link_gomp: %{static|static-libgcc|static-libstdc++|static-libgfortran: libgomp.a%s; : -lgomp } %{static: -ldl }" > /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/root/usr/lib/gcc/*-redhat-linux/9/libgomp.spec
 fi

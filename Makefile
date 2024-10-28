@@ -18,7 +18,7 @@ build_armv7:
 build_arm64:
 	docker buildx build --load --platform "linux/arm64" --rm -t $(IMAGE):$(VERSION)-arm64 --pull --build-arg DISABLE_OPTIMIZATIONS=$(DISABLE_OPTIMIZATIONS) .
 
-build: build_386 build_amd64 build_armv7 build_arm64
+build: build_amd64 build_armv7 build_arm64
 
 test_amd64:
 	docker run -it --platform "linux/amd64" --rm -e SKIP_FINALIZE=1 -e DISABLE_OPTIMIZATIONS=1 -v $$(pwd)/image:/hbb_build:ro centos:centos7 bash /hbb_build/build.sh
@@ -56,8 +56,8 @@ export_armv7:
 export_arm64:
 	docker save -o hbb_arm64.tar $(IMAGE):$(VERSION)-arm64
 
-release: push_amd64 push_armv7 push_arm64 push_386
-	docker manifest create $(IMAGE):$(VERSION) $(IMAGE):$(VERSION)-amd64 $(IMAGE):$(VERSION)-armv7 $(IMAGE):$(VERSION)-arm64 $(IMAGE):$(VERSION)-386
+release: push_amd64 push_armv7 push_arm64
+	docker manifest create $(IMAGE):$(VERSION) $(IMAGE):$(VERSION)-amd64 $(IMAGE):$(VERSION)-armv7 $(IMAGE):$(VERSION)-arm64 # $(IMAGE):$(VERSION)-386
 	docker manifest push $(IMAGE):$(VERSION)
 
 pull_amd64:
@@ -72,4 +72,4 @@ pull_armv7:
 pull_arm64:
 	docker pull $(IMAGE):$(VERSION)-arm64
 
-pull: pull_amd64 pull_arm64 pull_armv7 pull_386
+pull: pull_amd64 pull_arm64 pull_armv7

@@ -1,11 +1,6 @@
 # shellcheck shell=bash
 
-yumarch=$(cat /etc/yum/vars/basearch)
-if [[ "$yumarch" == "i386" ]]; then
-	DEVTOOLSET_VERSION=6
-else
-	DEVTOOLSET_VERSION=9
-fi
+DEVTOOLSET_VERSION=9
 
 function activate_holy_build_box_deps_installation_environment() {
 	# shellcheck disable=SC1090
