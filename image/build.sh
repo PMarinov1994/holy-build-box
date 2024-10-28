@@ -54,9 +54,14 @@ if ! eval_bool "$SKIP_INITIALIZE"; then
 	header "Updating system, installing compiler toolchain"
 
 	run sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
-	run sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+	run sed -i 's|#baseurl=http://mirror.centos.org|baseurl=https://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
 
-	run cp /hbb_build/CentOS-SCLo-scl.repo /etc/yum.repos.d/CentOS-SCLo-scl.repo
+	yumarch=$(cat /etc/yum/vars/basearch)
+	if [[ "$yumarch" == "i386" ]]; then
+		run cp /hbb_build/CentOS-SCLo-scl-i386.repo /etc/yum.repos.d/CentOS-SCLo-scl.repo
+	else
+		run cp /hbb_build/CentOS-SCLo-scl.repo /etc/yum.repos.d/CentOS-SCLo-scl.repo
+	fi
 
 	run touch /var/lib/rpm/*
 
