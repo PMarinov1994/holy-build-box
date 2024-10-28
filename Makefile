@@ -1,4 +1,4 @@
-VERSION = 4.0.1
+VERSION = 3.0.1
 ifneq ($VERSION, edge)
 MAJOR_VERSION := $(shell awk -v OFS=. -F. '{print $$1,$$2}' <<< $(VERSION))
 endif

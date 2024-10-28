@@ -52,15 +52,37 @@ if ! eval_bool "$SKIP_INITIALIZE"; then
 	done
 
 	header "Updating system, installing compiler toolchain"
+
+	run sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-*
+	run sed -i 's|#baseurl=http://mirror.centos.org|baseurl=http://vault.centos.org|g' /etc/yum.repos.d/CentOS-*
+
 	run touch /var/lib/rpm/*
 	run yum update -y
+
+	run yum install -y centos-release-scl
+
+	run sed -i 's/mirrorlist/#mirrorlist/g' /etc/yum.repos.d/CentOS-SCLo-*
+
+	arch = $(uname -m)
+	if [[ "$arch" == "x86_64" ]]; then
+		#
+		run sed -i 's|# baseurl=http://mirror.centos.org/centos/7|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-SCLo-*
+		run sed -i 's|#baseurl=http://mirror.centos.org/centos/7|baseurl=http://vault.centos.org/7.9.2009|g' /etc/yum.repos.d/CentOS-SCLo-*
+	elif [[ "$arch" == "aarch64" ]]; then
+		#
+		run sed -i 's|# baseurl=http://mirror.centos.org/centos/7|baseurl=http://vault.centos.org/altarch/7.9.2009|g' /etc/yum.repos.d/CentOS-SCLo-*
+		run sed -i 's|#baseurl=http://mirror.centos.org/centos/7|baseurl=http://vault.centos.org/altarch/7.9.2009|g' /etc/yum.repos.d/CentOS-SCLo-*
+	fi
+
+	run yum update -y
+
 	run yum install -y autoconf automake bzip2 cmake curl curl-devel epel-release \
 		file gettext git libtool m4 openssl-devel patch perl-IPC-Cmd \
 		pkgconfig python2-devel python2-pip python2-setuptools \
-		tar zlib-devel "gcc-toolset-$DEVTOOLSET_VERSION" "gcc-toolset-$DEVTOOLSET_VERSION-runtime"
+		tar zlib-devel "devtoolset-$DEVTOOLSET_VERSION"
 	run yum install -y --enablerepo=epel ccache
 
-	echo "*link_gomp: %{static|static-libgcc|static-libstdc++|static-libgfortran: libgomp.a%s; : -lgomp } %{static: -ldl }" > /opt/rh/gcc-toolset-${DEVTOOLSET_VERSION}/root/usr/lib/gcc/*-redhat-linux/9/libgomp.spec
+	echo "*link_gomp: %{static|static-libgcc|static-libstdc++|static-libgfortran: libgomp.a%s; : -lgomp } %{static: -ldl }" > /opt/rh/devtoolset-${DEVTOOLSET_VERSION}/root/usr/lib/gcc/*-redhat-linux/9/libgomp.spec
 fi
 
 
